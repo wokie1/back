@@ -4,6 +4,22 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Добавь CORS СРАЗУ в сервисы
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazor", policy =>
+    {
+
+        policy.WithOrigins(
+                "http://localhost:5210",   // HTTP фронтенд
+                "https://localhost:7199"   // HTTPS фронтенд
+            )
+            .AllowAnyHeader()
+            .AllowAnyOrigin()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -15,39 +31,50 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         mysql => mysql.EnableRetryOnFailure()
     ));
 
-// Сборка приложения
 var app = builder.Build();
-
-// Автоматическое создание БД и миграций
+builder.WebHost.UseUrls("https://localhost:5041");
+app.UseRouting();
+app.UseCors("AllowBlazor");
+// 2. Автоматические миграции (оставляем как есть)
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-
+    Console.WriteLine("Попытка применить миграции...");
+    
     try
     {
-        // Применяем миграции
         db.Database.Migrate();
-
-        // Если таблицы пустые — заполняем начальными данными
-        if (!db.Stores.Any() && !db.Products.Any())
+        Console.WriteLine("Миграции успешно применены");
+        
+        if (!db.Stores.Any())
         {
             SeedDatabase(db);
+            Console.WriteLine("Добавлены тестовые данные");
         }
     }
-    catch (Exception ex) { 
-        Console.WriteLine($"error: {ex.Message}");
-        Console.WriteLine(ex.ToString());
+    catch (Exception ex)
+    {
+        Console.WriteLine($"ОШИБКА: {ex.Message}");
+        if (ex.InnerException != null)
+            Console.WriteLine($"Внутренняя ошибка: {ex.InnerException.Message}");
     }
 }
 
-// Swagger и маршруты
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+
+app.MapGet("/", () => 
+{
+    var env = app.Environment;
+    return Results.Text($"BackendEC API работает!\n" +
+                      $"Режим: {env.EnvironmentName}\n" +
+                      $"Swagger: /swagger\n" +
+                      $"API: /api/[controller]");
+});
 
 app.Run();
 
