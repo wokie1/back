@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backendec.Controllers
 {
+    /// <summary>
+    /// данный контроллер нужен чтобы отдавать данные о статистике и выборку товаров
+    /// </summary>
+
     [ApiController]
     [Route("api/stats")]
     public class StatsController : ControllerBase

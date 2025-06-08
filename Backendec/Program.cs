@@ -1,6 +1,10 @@
 ﻿using Backendec.Models;
 using Microsoft.EntityFrameworkCore;
 
+///<summary>
+///Точка входа в приложение, здесь мы настраиваем каким ip фронта доверять, настраиваем CORS
+///Подключаем Swagger - встроенный дебагер, создаем и заполняем бд если ее нет
+/// </summary>
 
 var builder = WebApplication.CreateBuilder(args);
 

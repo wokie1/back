@@ -1,5 +1,9 @@
 namespace Backendec.Models
 {
+    /// <summary>
+    /// класс описывающий наличие товара, по нему строилась бд
+    /// </summary>
+
     public class Availability
     {
         public int StoreId { get; set; }

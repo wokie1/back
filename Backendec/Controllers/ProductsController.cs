@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backendec.Controllers
 {
+    /// <summary>
+    /// данный контроллер нужен чтобы отдавать с бэка инфу о товарах
+    /// </summary>
+
     [ApiController]
     [Route("api/products")]
     public class ProductsController : ControllerBase

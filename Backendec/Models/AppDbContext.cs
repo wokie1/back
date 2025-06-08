@@ -4,6 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backendec.Models
 {
+    /// <summary>
+    /// dbcontext описывает все моменты по которым строится бд, классы превращаются в таблицы, задаются связи
+    /// и указываются ключи
+    /// </summary>
+
     public class AppDbContext:DbContext
     {
 

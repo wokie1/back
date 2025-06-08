@@ -1,5 +1,8 @@
 namespace Backendec.Models
 {
+    /// <summary>
+    /// класс описывающий продажи, по нему строилась бд
+    /// </summary>
     public class Sale
     {
         public int CustomerId { get; set; }

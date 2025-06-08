@@ -1,5 +1,9 @@
 namespace Backendec.Models
 {
+    /// <summary>
+    /// класс описывающий товары, по нему строилась бд
+    /// </summary>
+
     public class Product
     {
         public int Id { get; set; }
