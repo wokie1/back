@@ -32,7 +32,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     ));
 
 var app = builder.Build();
-builder.WebHost.UseUrls("https://localhost:5041");
+builder.WebHost.UseUrls("http://localhost:5041");
 app.UseRouting();
 app.UseCors("AllowBlazor");
 // 2. Автоматические миграции (оставляем как есть)
@@ -62,7 +62,6 @@ using (var scope = app.Services.CreateScope())
 
 app.UseSwagger();
 app.UseSwaggerUI();
-//app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
