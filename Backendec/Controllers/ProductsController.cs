@@ -27,5 +27,20 @@ namespace Backendec.Controllers
                 .ToListAsync();
             return Ok(expired);
         }
+
+        [HttpGet("{productId}/stores")]
+        public async Task<IActionResult> GetStoresWithProduct(int productId)
+        {
+            var storesWithProduct = await _context.Availabilitys
+                .Where(a => a.ProductId == productId && a.Quantity > 0)
+                .Join(_context.Stores,
+                      a => a.StoreId,
+                      s => s.Id,
+                      (a, s) => s)
+                .Distinct()
+                .ToListAsync();
+
+            return Ok(storesWithProduct);
+        }
     }
 }

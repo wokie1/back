@@ -18,5 +18,30 @@ namespace Backendec.Controllers
             var stores = await _context.Stores.ToListAsync();
             return Ok(stores);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetStoreById(int id)
+        {
+            var store = await _context.Stores.FindAsync(id);
+            if (store == null)
+                return NotFound();
+
+            return Ok(store);
+        }
+
+        [HttpGet("{storeId}/products")]
+        public async Task<IActionResult> GetProductsInStore(int storeId)
+        {
+            var productsInStore = await _context.Availabilitys
+                .Where(a => a.StoreId == storeId && a.Quantity > 0)
+                .Join(_context.Products,
+                      a => a.ProductId,
+                      p => p.Id,
+                      (a, p) => p)
+                .Distinct()
+                .ToListAsync();
+
+            return Ok(productsInStore);
+        }
     }
 }
